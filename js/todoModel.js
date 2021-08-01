@@ -29,14 +29,11 @@ var app = app || {};
 	};
 
 	app.TodoModel.prototype.addTodo = function (title) {
-		this.todos = [
-			{
-				id: Utils.uuid(),
-				title: title,
-				completed: false
-			},
-			...this.todos
-		];
+		this.todos = this.todos.concat({
+			id: Utils.uuid(),
+			title: title,
+			completed: false
+		});
 
 		this.inform();
 	};
@@ -79,6 +76,12 @@ var app = app || {};
 		this.inform();
 	};
 
-	app.TodoModel.prototype.clearCompleted = function() {}
+	app.TodoModel.prototype.clearCompleted = function() {
+		this.todos = this.todos.filter(function (todo) {
+			return !todo.completed;
+		});
+
+		this.inform();
+	}
 
 })();

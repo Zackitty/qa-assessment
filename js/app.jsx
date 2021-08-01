@@ -88,7 +88,14 @@ var app = app || {};
 			var todos = this.props.model.todos;
 
 			var shownTodos = todos.filter(function (todo) {
-				return todo
+				switch (this.state.nowShowing) {
+					case app.ACTIVE_TODOS:
+						return !todo.completed;
+					case app.COMPLETED_TODOS:
+						return todo.completed;
+					default:
+						return true;
+					}
 			}, this);
 
 			var todoItems = shownTodos.map(function (todo) {
@@ -111,7 +118,7 @@ var app = app || {};
 			}, 0);
 
 			var completedCount = todos.length - activeTodoCount;
-
+		if (activeTodoCount || completedCount) {
 			footer =
 				<TodoFooter
 					count={activeTodoCount}
@@ -119,6 +126,7 @@ var app = app || {};
 					nowShowing={this.state.nowShowing}
 					onClearCompleted={this.clearCompleted}
 				/>;
+		}
 
 			if (todos.length) {
 				main = (
